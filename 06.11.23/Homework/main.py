@@ -13,11 +13,6 @@
 class Booking:
     '''\nClass for creation and managing of order list for booking\n'''
 
-    _client: str
-    _room: str
-    _period_days: int
-    _price_per_day: float
-
     __orders = {}
 
     def __str__(self):
