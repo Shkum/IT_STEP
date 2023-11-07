@@ -13,9 +13,7 @@
 class TaxiOrders:
     '''Create and manage taxi`s orders'''
 
-
-    def __init__(self):
-        self.__orders = {}
+    __orders = {}
 
     def __str__(self):
         return str(self.__orders)
@@ -61,5 +59,3 @@ print(orders)
 orders.del_order('kolobok')
 orders.del_order('Kolobok')
 print(orders)
-
-
