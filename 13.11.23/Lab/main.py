@@ -23,6 +23,12 @@ class NationalPassport:
     def get_info(self):
         return f'{self._name} {self._family_name}, {self._address}, {self._passport_number}'
 
+    def change_family_name(self, new_family_name):
+        self._family_name = new_family_name
+
+    def change_address(self, new_address):
+        self._address = new_address
+
 
 @dataclass
 class ForeignPassport(NationalPassport):
@@ -47,7 +53,7 @@ class Passports(ForeignPassport):
     pass
 
 
-passports_data = Passports('Tom', 'Jerry', 'Earth','KH0123456', 'HP987456321', ['USA', 'AUSTRALIA'])
+passports_data = Passports('Tom', 'Jerry', 'Earth', 'KH0123456', 'HP987456321', ['USA', 'AUSTRALIA'])
 print(passports_data.get_info())
 passports_data.add_visa('Japan')
 passports_data.add_visa('Korea')
@@ -55,6 +61,6 @@ print(passports_data.get_info())
 passports_data.del_visa('USA')
 passports_data.del_visa('USA')
 print(passports_data.get_info())
-
-
-
+passports_data.change_family_name('Ratatuy')
+passports_data.change_address('Europe')
+print(passports_data.get_info())
