@@ -13,8 +13,8 @@
 ■ Ellipse — еліпс із заданими координатами верхнього кута
 описаного навколо нього прямокутника зі сторонами,
 паралельними осям координат, та розмірами цього прямокутника.
-Створіть список фігур, збережіть фігури у файл, завантажте в інший список та відобразіть інформацію про кожну
-фігуру'''
+Створіть список фігур, збережіть фігури у файл, завантажте в
+інший список та відобразіть інформацію про кожну фігуру'''
 from dataclasses import dataclass
 import turtle
 
@@ -27,6 +27,20 @@ class Shape:
     radius: int = 0
     center_pos: list = (0, 0)
     rectangle_around_ellipse: list = (0, 0, 100, 200)
+    figures: list = ()
+
+    @classmethod
+    def save_all_figures(cls):
+        with open('all_figures.txt', 'w', encoding='UTF-8') as f:
+            for i in cls.__subclasses__():
+                print(i.__doc__, file=f)
+
+    @classmethod
+    def load_all_figures(cls):
+        with open('all_figures.txt', 'r', encoding='UTF-8') as f:
+            lines = f.readlines()
+        for line in lines:
+            print(line)
 
     def show(self):
         cur = turtle.Turtle()
@@ -97,15 +111,13 @@ class Ellipse(Shape):
 
 square = Square(200)
 rectangle = Rectangle(150, 300, [300, 300])
-
-square.show()
-rectangle.show()
-
 circle = Circle(radius=150)
-circle.show()
-
 ellipse = Ellipse(radius=150)
-ellipse.show()
+
+# square.show()
+# rectangle.show()
+# circle.show()
+# ellipse.show()
 
 square.save('square.txt')
 rectangle.save('rectangle.txt')
@@ -117,8 +129,9 @@ rectangle.load('rectangle.txt')
 circle.load('circle.txt')
 ellipse.load('ellipse.txt')
 
-square.show()
-rectangle.show()
-circle.show()
-ellipse.show()
-
+# square.show()
+# rectangle.show()
+# circle.show()
+# ellipse.show()
+Shape.save_all_figures()
+Shape.load_all_figures()
