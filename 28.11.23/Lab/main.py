@@ -64,7 +64,7 @@ class LinkedList:
                 print(f'Value {old_data} replaced with {new_data}')
                 return
             current = current.next
-        print(f'-> Value {old_data} not found')
+        print(f'>>> Value {old_data} not found')
 
     def delete(self, data):
         current = self.head
@@ -84,7 +84,7 @@ class LinkedList:
                 return
             prev = current
             current = current.next
-        print(f'-> Value {data} not found')
+        print(f'>>> Value {data} not found')
 
     def find_value(self, value):
         if not value:
@@ -95,7 +95,7 @@ class LinkedList:
                 print(f'Value {value} found in LinkedList')
                 return
             current = current.next
-        print(f'-> Value {value} not found')
+        print(f'>>> Value {value} not found')
 
 
 my_list = LinkedList()
@@ -120,7 +120,7 @@ try:
     new_value = int(input("Enter new value: "))
     my_list.replace(old_value, new_value)
 except:
-    print('-> Wrong data')
+    print('>>> Wrong data')
 
 print(my_list)
 
