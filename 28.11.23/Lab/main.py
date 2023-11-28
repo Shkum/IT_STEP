@@ -43,6 +43,8 @@ class LinkedList:
         return f'{self.head}'
 
     def append(self, data):
+        if not data:
+            return
         new_node = Node(data)
         if self.head is None:
             self.head = new_node
@@ -53,6 +55,8 @@ class LinkedList:
         last_node.next = new_node
 
     def replace(self, old_data, new_data):
+        if not old_data or not new_data:
+            return
         current = self.head
         while current:
             if current.data == old_data:
@@ -60,7 +64,7 @@ class LinkedList:
                 print(f'Value {old_data} replaced with {new_data}')
                 return
             current = current.next
-        print(f'Value {old_data} not found')
+        print(f'-> Value {old_data} not found')
 
     def delete(self, data):
         current = self.head
@@ -80,19 +84,24 @@ class LinkedList:
                 return
             prev = current
             current = current.next
-        print(f'Value {data} not found')
+        print(f'-> Value {data} not found')
 
-    def find_vlue(self, value):
+    def find_value(self, value):
+        if not value:
+            return
         current = self.head
         while current:
             if current.data == value:
                 print(f'Value {value} found in LinkedList')
                 return
             current = current.next
-        print(f'Value {value} not found')
+        print(f'-> Value {value} not found')
 
 
 my_list = LinkedList()
+
+
+
 my_list.append(1)
 my_list.append(2)
 my_list.append(3)
@@ -106,10 +115,13 @@ for i in nums.split():
 
 print(my_list)
 
-old_value = int(input("Enter number to change: "))
-new_value = int(input("Enter new value: "))
+try:
+    old_value = int(input("Enter number to change: "))
+    new_value = int(input("Enter new value: "))
+    my_list.replace(old_value, new_value)
+except:
+    print('-> Wrong data')
 
-my_list.replace(old_value, new_value)
 print(my_list)
 
 my_list.delete(1)
@@ -121,5 +133,47 @@ print(my_list)
 my_list.delete(20)
 print(my_list)
 
-my_list.find_vlue(3)
-my_list.find_vlue(4)
+my_list.find_value(3)
+my_list.find_value(4)
+
+
+
+
+
+msg = ('\n     Please enter your choice:\n'
+       '1 - Add element to LinkedList\n'
+       '2 - Delete  element from LinkedList\n'
+       '3 - Show content of LinkedList\n'
+       '4 - Check if value is in LinkedList\n'
+       '5 - Replace value at LinkedList\n'
+       '6 - Exit\n'
+       '---> ')
+
+sel = input(msg)
+
+while sel:
+    match sel:
+        case '1':
+            val = int(input("Enter number to add: "))
+            my_list.append(val)
+        case '2':
+            val = int(input("Enter number to delete: "))
+            my_list.delete(val)
+        case '3':
+            pass
+        case '4':
+            val = int(input("Enter number to find: "))
+            my_list.find_value(val)
+        case '5':
+            val = int(input("Enter number to replace: "))
+            val_new = int(input("Enter new number: "))
+            my_list.replace(val, val_new)
+        case _:
+            print('Exiting...')
+            break
+    print(my_list)
+    sel = input(msg)
+
+
+
+
