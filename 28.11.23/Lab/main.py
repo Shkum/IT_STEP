@@ -52,39 +52,30 @@ class DoubleLinkedList:
             if current.data == old_data:
                 current.data = new_data
                 print(f'Value "{old_data}" replaced with "{new_data}"')
-                return
             current = current.next
-        print(f'Value "{old_data}" not found')
 
     def delete(self, data):
         current = self.head
-        prev = current
         while current:
             if current.data == data:
-                if prev == current:
+                if current.prev:
+                    current.prev.next = current.next
+                else:
                     self.head = current.next
-                    print(f'Value "{data}" deleted')
-                    return
-                if current.next is None:
-                    prev.next = None
-                    print(f'Value "{data}" deleted')
-                    return
-                prev.next = current.next
+                if current.next:
+                    current.next.prev = current.prev
                 print(f'Value "{data}" deleted')
-                return
-            current.prev = prev
-            prev = current
             current = current.next
-        print(f'Value "{data}" not found')
 
     def find_value(self, value):
         current = self.head
         while current:
             if current.data == value:
                 print(f'Value "{value}" found in LinkedList')
-                return
+                return True
             current = current.next
         print(f'Value "{value}" not found')
+        return False
 
 
 my_list = DoubleLinkedList()
@@ -99,7 +90,8 @@ lst = []
 st = ' '
 while st:
     st = input("Enter strings divided by ENTER (empty string to stop): ")
-    lst.append(st)
+    if len(st) > 0:
+        lst.append(st)
 
 for i in lst:
     my_list.append(i)
@@ -133,9 +125,8 @@ msg = ('\n     Please enter your choice:\n'
        '6 - Exit\n'
        '---> ')
 
-sel = input(msg)
-
 while True:
+    sel = input(msg)
     match sel:
         case '1':
             val = input("Enter value to add: ")
@@ -156,4 +147,3 @@ while True:
             print('\nExiting...')
             break
     print(my_list)
-    sel = input(msg)
