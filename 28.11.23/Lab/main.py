@@ -87,8 +87,6 @@ class DoubleLinkedList:
         print(f'Value "{value}" not found')
 
 
-
-
 my_list = DoubleLinkedList()
 my_list.append("1")
 my_list.append('2')
@@ -125,3 +123,37 @@ print(my_list)
 
 my_list.find_value('3')
 my_list.find_value('4')
+
+msg = ('\n     Please enter your choice:\n'
+       '1 - Add element to LinkedList\n'
+       '2 - Delete  element from LinkedList\n'
+       '3 - Show content of LinkedList\n'
+       '4 - Check if value is in LinkedList\n'
+       '5 - Replace value at LinkedList\n'
+       '6 - Exit\n'
+       '---> ')
+
+sel = input(msg)
+
+while True:
+    match sel:
+        case '1':
+            val = input("Enter value to add: ")
+            my_list.append(val)
+        case '2':
+            val = input("Enter value to delete: ")
+            my_list.delete(val)
+        case '3':
+            pass
+        case '4':
+            val = input("Enter value to find: ")
+            my_list.find_value(val)
+        case '5':
+            val = input("Enter value to replace: ")
+            val_new = input("Enter new value: ")
+            my_list.replace(val, val_new)
+        case _:
+            print('\nExiting...')
+            break
+    print(my_list)
+    sel = input(msg)
