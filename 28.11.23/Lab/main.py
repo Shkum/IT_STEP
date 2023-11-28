@@ -14,33 +14,26 @@
 
 
 class Node:
-    def __init__(self, data, next=None):
+    def __init__(self, data):
         self.data = data
-        self.next = next
+        self.prev = None
+        self.next = None
 
     def __str__(self):
-        return f'[{self.data}] -> {self.next}'
+        return f'{self.data}'
 
 
-node = Node(1)
-current_node = node
-
-for i in range(2, 10):
-    new_node = Node(i ** 2)
-    current_node.next = new_node
-    current_node = new_node
-
-print(node)
-
-print()
-
-
-class LinkedList:
+class DoubleLinkedList:
     def __init__(self):
         self.head = None
 
     def __str__(self):
-        return f'{self.head}'
+        current = self.head
+        elements = []
+        while current:
+            elements.append(str(current.data))
+            current = current.next
+        return f"{' <-> '.join(elements)}"
 
     def append(self, data):
         new_node = Node(data)
@@ -51,6 +44,7 @@ class LinkedList:
         while last_node.next:
             last_node = last_node.next
         last_node.next = new_node
+        new_node.prev = last_node
 
     def replace(self, old_data, new_data):
         current = self.head
@@ -78,6 +72,7 @@ class LinkedList:
                 prev.next = current.next
                 print(f'Value "{data}" deleted')
                 return
+            current.prev = prev
             prev = current
             current = current.next
         print(f'Value "{data}" not found')
@@ -92,7 +87,9 @@ class LinkedList:
         print(f'Value "{value}" not found')
 
 
-my_list = LinkedList()
+
+
+my_list = DoubleLinkedList()
 my_list.append("1")
 my_list.append('2')
 my_list.append('3')
