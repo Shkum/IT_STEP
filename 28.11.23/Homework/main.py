@@ -130,4 +130,4 @@ while True:
         case _:
             print('\nExiting...')
             break
-    print(my_list)
+    print('\n', my_list)
