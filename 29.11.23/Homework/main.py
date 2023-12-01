@@ -53,7 +53,7 @@ def rebuild_towers(n: int, a: Stack, b: Stack, c: Stack, history: Stack):
     return history
 
 
-n = 15
+n = 20
 history = Stack()
 a = Stack()
 for i in range(n):
@@ -68,7 +68,7 @@ history = rebuild_towers(n, a, b, c, history)
 
 print('\nRebuilding of towers ...')
 print('\nRebuilding of towers completed\n')
-print(f'It used {Stack.counter} operations\n')
+print(f'It used {Stack.counter:,} operations\n')
 
 print('Stack a:', a)
 print('Stack b:', b)
