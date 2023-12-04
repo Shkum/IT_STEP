@@ -10,3 +10,29 @@
 ■ Show — відображення на екрані всіх елементів черги. Показуючи елемент, також необхідно вказати і його пріоритет.
 На старті додатка відобразіть меню, в якому користувач може вибрати необхідну операцію.
 '''
+
+class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+menu = '''
+1 - Check if queue is empty
+2 - Check if queue if full
+3 - Enqueue, add new symbol
+4 - Dequeue, delete first symbol
+5 - Show content of queue
+6 - Exit
+----> '''
