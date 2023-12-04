@@ -34,7 +34,7 @@ class MyCherga:
 
     def dequeue(self):
         if len(self.__que) > 0:
-            return self.__que.pop()
+            return self.__que.popleft()
         else:
             return 'Queue is empty'
 
@@ -44,15 +44,41 @@ class MyCherga:
 
 test = MyCherga(4)
 
-print('Is empty:', test.is_empty())
-test.enqueue(1)
-test.enqueue(2)
-test.enqueue(3)
-test.enqueue(4)
-print(test.show())
-print('Is full:', test.is_full())
-print('Is empty:', test.is_empty())
-test.dequeue()
-print(test)
+# print('Is empty:', test.is_empty())
+# test.enqueue(1)
+# test.enqueue(2)
+# test.enqueue(3)
+# test.enqueue(4)
+# print(test.show())
+# print('Is full:', test.is_full())
+# print('Is empty:', test.is_empty())
+# test.dequeue()
+# print(test)
 
+menu = '''
+1 - Check if queue is empty
+2 - Check if queue if full
+3 - Enqueue, add new symbol
+4 - Dequeue, delete first symbol
+5 - Show content of queue
+6 - Exit
+----> '''
 
+while True:
+    sel = input(menu)
+    match sel:
+        case '1':
+            print('Is empty:', test.is_empty())
+        case '2':
+            print('Is full:', test.is_full())
+        case '3':
+            test.enqueue(input('Enter symbol to add: '))
+        case '4':
+            test.dequeue()
+        case '5':
+            print(test.show())
+            continue
+        case _:
+            print('\nExiting...')
+            break
+    print(f'\n{test}\n')
