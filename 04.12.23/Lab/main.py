@@ -66,24 +66,24 @@ menu = '''
 6 - Exit
 ----> '''
 
-u = User()
+user = User()
 
 while True:
     sel = input(menu)
     match sel:
         case '1':
-            u.add_new_user(input('Enter login: '), input('Enter password: '))
+            user.add_new_user(input('Enter login: '), input('Enter password: '))
         case '2':
-            u.delete_user(input('Enter user`s login: '))
+            user.delete_user(input('Enter user`s login: '))
         case '3':
-            print('User existing:', u.if_exists(input('Enter user`s login: ')))
+            print('User existing:', user.if_exists(input('Enter user`s login: ')))
         case '4':
-            u.rename_login(input('Enter old user`s login:'), input('Enter new user`s login:'))
+            user.rename_login(input('Enter old user`s login:'), input('Enter new user`s login:'))
         case '5':
-            u.change_pas(input('Enter user`s login:'),
-                         input('Enter old user`s password:'),
-                         input('Enter new user`s password:'))
+            user.change_pas(input('Enter user`s login:'),
+                            input('Enter old user`s password:'),
+                            input('Enter new user`s password:'))
         case _:
             print(f'\nExiting...\n')
             break
-    print(f'\n{u}\n')
+    print(f'\n{user}\n')
