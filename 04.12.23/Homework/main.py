@@ -10,9 +10,9 @@
 3. Кількість вільних місць у катері є випадковою величиною.
 Вибір необхідних структур даних визначте самостійно.'''
 
-
 import random
 import time
+
 
 class MarinaSimulation:
     def __init__(self):
@@ -24,17 +24,18 @@ class MarinaSimulation:
 
     def simulate(self, num_iterations):
         for i in range(num_iterations):
+            self.stop_type = random.choice(['end', 'other'])
+            self.max_passengers = 20
+            self.available_seats = random.randint(5, 15)
             current_hour = i % 12
             passengers = self.generate_passengers(current_hour)
             boats = self.generate_boats(current_hour)
-
-            # Учет времени ожидания пассажиров и катеров
             waiting_time_passengers = max(0, boats - passengers) * self.boat_arrival_rate[current_hour]
             waiting_time_boats = max(0, passengers - self.available_seats) * self.passenger_arrival_rate[current_hour]
             total_stay_time = waiting_time_passengers + waiting_time_boats
 
-            print(f'\nHour: {current_hour}, Type: {self.stop_type}')
-            print(f'Passengers: {passengers}, Boats: {boats}, Available Seats: {self.available_seats}')
+            print(f'\nCurrent hour: {current_hour} \nStop type: {self.stop_type}')
+            print(f'Passengers per current hour: {passengers:.1f}\nBoats per current hour: {boats:.1f}\nAvailable Seats: {self.available_seats}')
             print(f'Total Stay Time: {total_stay_time:.2f} minutes')
 
             time.sleep(1)
@@ -47,6 +48,6 @@ class MarinaSimulation:
         time_between_arrivals = self.boat_arrival_rate[current_hour]
         return random.expovariate(1 / time_between_arrivals)
 
-# Пример использования
+
 simulation = MarinaSimulation()
 simulation.simulate(24)
