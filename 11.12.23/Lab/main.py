@@ -60,7 +60,6 @@ print(obj)
 obj2 = obj.load_data()
 print(obj2)
 
-
 menu = '''
        Menu:
 1 - Load data
@@ -85,5 +84,3 @@ while sel:
             pass
     print('\n', obj, sep='')
     sel = input(menu)
-
-
