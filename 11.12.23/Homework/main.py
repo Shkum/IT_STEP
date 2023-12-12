@@ -73,4 +73,3 @@ obj.change_country('Japan', 'Tokyo', 'TOKYO')
 print('OBJ1', obj)
 obj2 = obj.load_data()
 print('\nOBJ2', obj2)
-
