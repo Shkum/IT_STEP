@@ -69,7 +69,7 @@ obj.data = music_dict
 print('\nCREATE MUSIC DICT\n')
 [print(x, y) for x, y in obj.data.items()]
 print('\nADD NEW BAND\n')
-obj.add_band('Vopli Vidoplyasova',['Kraina Mriy', "Tantsi", 'Fayno'])
+obj.add_band('Vopli Vidoplyasova', ['Kraina Mriy', "Tantsi", 'Fayno'])
 print('\nSHOW DICT WITH NEW BAND\n')
 [print(x, y) for x, y in obj.data.items()]
 print('\nADD NEW ALBUM\n')
@@ -90,4 +90,5 @@ print('\nDELETE BAND\n')
 obj2.del_band('Pink Floyd')
 print('\nSHOW DICT WITHOUT DELETED BAND\n')
 [print(x, y) for x, y in obj2.data.items()]
+
 
