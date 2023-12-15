@@ -40,7 +40,7 @@ class Watch:
 class WatchWithSave(Watch):
     def __init__(self, model, maker, year, price, watch_type):
         super().__init__(model, maker, year, price, watch_type)
-        self.json = 'json.json'
+        self.json = 'file.json'
         self.pickle = 'file.pickle'
 
     def save_json(self):
