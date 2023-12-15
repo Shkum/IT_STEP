@@ -42,4 +42,5 @@ data = {'1': 'test', '2': 'test2', '3': 'test data'}
 
 service1.save_data(data)
 
-[print(k, v) for k, v in dict(service2.load_data()).items()]
+res = service2.load_data().items()
+[print(k, v) for k, v in res]
