@@ -5,56 +5,13 @@
 # вказаної місцевості. Використовуйте для реалізації додатку багатопотокові механізми.
 # Дані про погоду мають бути наперед визначеними та взяті з файлу
 
-import json
+
 from threading import Thread
-from pyowm.owm import OWM
-from pyowm.utils.config import get_default_config
 
+from server import create_server
+from client import create_client
 
-# pip install setuptools - если ошибка
-
-class Weather:
-
-    def __init__(self, place='Kyiv'):
-        self.place = place
-        self.config_dict = get_default_config()
-        self.config_dict['language'] = 'ua'
-        self.owm = OWM('6447d90ffd2f57c8d4fadf48e2127c01', self.config_dict)
-        self.file = 'txt.txt'
-
-    def get_weather(self):
-        mgr = self.owm.weather_manager()
-        observation = mgr.weather_at_place(self.place)
-        weather = observation.weather
-
-        temp = weather.temperature('celsius')['temp']
-        status = weather.detailed_status
-        pressure = weather.barometric_pressure()['press']
-        rain = weather.rain
-        wind = weather.wind()
-        res = f'\nWeather in {self.place}:\nTemperature: {temp}\nStatus: {status}\nPressure: {pressure}\nRain: {rain}\nWind: {wind}'
-        with open(self.file, 'w', encoding='utf-8') as f:
-            f.write(res)
-
-        # 'barometric_pressure', 'clouds', 'detailed_status', 'dewpoint', 'from_dict',
-        # 'from_dict_of_lists', 'heat_index', 'humidex', 'humidity', 'precipitation_probability',
-        # 'pressure', 'rain', 'ref_time', 'reference_time', 'snow', 'srise_time', 'sset_time',
-        # 'status', 'sunrise_time', 'sunset_time', 'temp', 'temperature', 'to_dict', 'utc_offset',
-        # 'uvi', 'visibility', 'visibility_distance', 'weather_code', 'weather_icon_name',
-
-    def set_location(self, new_location):
-        self.place = new_location
-
-    def get_location(self):
-        return self.place
-
-
-weather = Weather()
-weather.place = 'Kyiv'
-t = Thread(weather.get_weather())
-
-t.start()
-t.join()
-
-
-
+server = Thread(target=create_server)
+client = Thread(target=create_client)
+server.start()
+client.start()
