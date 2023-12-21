@@ -20,6 +20,7 @@ class Weather:
         self.config_dict = get_default_config()
         self.config_dict['language'] = 'ua'
         self.owm = OWM('6447d90ffd2f57c8d4fadf48e2127c01', self.config_dict)
+        self.file = 'txt.txt'
 
     def get_weather(self):
         mgr = self.owm.weather_manager()
@@ -31,7 +32,9 @@ class Weather:
         pressure = weather.barometric_pressure()['press']
         rain = weather.rain
         wind = weather.wind()
-        print(f'\nWeather in {self.place}:\nTemperature: {temp}\nStatus: {status}\nPressure: {pressure}\nRain: {rain}\nWind: {wind}')
+        res = f'\nWeather in {self.place}:\nTemperature: {temp}\nStatus: {status}\nPressure: {pressure}\nRain: {rain}\nWind: {wind}'
+        with open(self.file, 'w', encoding='utf-8') as f:
+            f.write(res)
 
         # 'barometric_pressure', 'clouds', 'detailed_status', 'dewpoint', 'from_dict',
         # 'from_dict_of_lists', 'heat_index', 'humidex', 'humidity', 'precipitation_probability',
@@ -48,12 +51,10 @@ class Weather:
 
 weather = Weather()
 weather.place = 'Kyiv'
-t1 = Thread(weather.get_weather())
+t = Thread(weather.get_weather())
 
-weather.place = 'Odessa'
-t2 = Thread(weather.get_weather())
+t.start()
+t.join()
 
-t2.start()
-t1.start()
-t1.join()
-t2.join()
+
+
