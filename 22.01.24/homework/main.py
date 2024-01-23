@@ -37,6 +37,16 @@ engine = create_engine(db_url)
 Base = declarative_base()
 
 
+def save_data(txt_data):
+    with open(file_name, 'a') as f:
+        if isinstance(txt_data, (list, tuple)):
+            for row in txt_data:
+                f.write(str(row) + '\n')
+        else:
+            f.write(str(txt_data))
+        f.write('\n' * 3)
+
+
 #                                      CREATE TABLES
 class Sales(Base):
     __tablename__ = 'sales'
@@ -95,6 +105,7 @@ session.commit()
 # Відображення усіх угод
 def display_all_sales(session):
     sales = session.query(Sales).all()
+    save_data(sales)
     print("\nУсі угоди:")
     for sale in sales:
         print(sale)
@@ -103,6 +114,7 @@ def display_all_sales(session):
 # Відображення угод конкретного продавця
 def display_sales_by_salesman(session, salesman_id):
     sales = session.query(Sales).filter_by(salesman_id=salesman_id).all()
+    save_data(sales)
     print(f"\nУгоди продавця з id {salesman_id}:")
     for sale in sales:
         print(sale)
@@ -111,6 +123,7 @@ def display_sales_by_salesman(session, salesman_id):
 # Відображення максимальної за сумою угоди
 def display_max_sale(session):
     max_sale = session.query(Sales).order_by(Sales.amount.desc()).first()
+    save_data(max_sale)
     print(f"\nМаксимальна за сумою угода:")
     print(max_sale)
 
@@ -118,6 +131,7 @@ def display_max_sale(session):
 # Відображення мінімальної за сумою угоди
 def display_min_sale(session):
     min_sale = session.query(Sales).order_by(Sales.amount).first()
+    save_data(min_sale)
     print(f"\nМінімальна за сумою угода:")
     print(min_sale)
 
@@ -125,6 +139,7 @@ def display_min_sale(session):
 # Відображення максимальної суми угоди для конкретного продавця
 def display_max_sale_by_salesman(session, salesman_id):
     max_sale = session.query(Sales).filter_by(salesman_id=salesman_id).order_by(Sales.amount.desc()).first()
+    save_data(max_sale)
     print(f"\nМаксимальна за сумою угода для продавця з id {salesman_id}:")
     print(max_sale)
 
