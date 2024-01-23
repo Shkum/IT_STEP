@@ -2,7 +2,16 @@
 # Створіть однотабличну базу даних People (ім’я, прізвище, місто, країна, дата народження) з однойменною
 # таблицею. Напишіть програму, яка дозволяє користувачеві ввести запит і отримати результати роботи запиту.
 # Підтримуйте лише SELECT як запит. Якщо ви спробуєте
-# виконати інші запити, потрібно буде генерувати помилку
+# виконати інші запити, потрібно буде генерувати помилку.
+
+# Завдання 2
+# Додайте до першого завдання можливість вносити,
+# видаляти, оновлювати дані за допомогою запитів INSERT,
+# DELETE, UPDATE. Перед виконанням запиту перевіряйте
+# правильність назви таблиці. Також забороніть запит на
+# видалення та оновлення усіх рядків (UPDATE та DELETE
+# без умов)
+
 
 from sqlalchemy import create_engine, Column, Integer, String, Sequence, Date
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -51,12 +60,26 @@ session = Session()
 
 while True:
     user_query = input("Enter your query (exit - exit): ")
+
     if user_query.lower() == "exit":
         break
     try:
-        result = session.execute(text(user_query))
-        session.commit()
-        print("Successfully completed")
+        if 'UPDATE' in user_query.upper() or 'DELETE' in user_query.upper():
+            if 'WHERE' not in user_query.upper():
+                raise ValueError("Update or Delete query must have condition 'WHERE'")
+            else:
+                result = session.execute(text(user_query))
+                session.commit()
+                print("Successfully completed")
+
+        if 'SELECT' in user_query.upper():
+            result = session.execute(text(user_query))
+            rows = result.fetchall()
+            if rows:
+                print("Результат: ")
+                for row in rows:
+                    print(row)
+
     except Exception as e:
         print(f"Query error: {e}")
 
