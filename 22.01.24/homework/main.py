@@ -20,6 +20,7 @@
 
 import sqlalchemy
 from sqlalchemy import create_engine, Column, Integer, String, Sequence, Date
+from sqlalchemy import update, delete
 from sqlalchemy.orm import sessionmaker, declarative_base
 import json
 
@@ -129,18 +130,23 @@ def display_max_sale_by_salesman(session, salesman_id):
 
 
 def insert_data(session):
-    # Логіка для вставки даних
-    pass
+    new_record = Sales(date='2024-01-24', amount=9999, salesman_id=5, customer_id=5)
+    session.add(new_record)
+    session.commit()
 
 
 def update_data(session):
-    # Логіка для оновлення даних
-    pass
-
+    old_amount = int(input('Enter old amount to update: '))
+    new_amount = int(input('Enter new amount to update: '))
+    update_statement = update(Sales).where(Sales.amount == old_amount).values(amount=new_amount)
+    session.execute(update_statement)
+    session.commit()
 
 def delete_data(session):
-    # Логіка для видалення даних
-    pass
+    ids = int(input('Enter ID to delete: '))
+    delete_statement = delete(Sales).where(Sales.id == ids)
+    session.execute(delete_statement)
+    session.commit()
 
 
 menu = '''\n  MENU:
