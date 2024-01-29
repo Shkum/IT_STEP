@@ -137,7 +137,7 @@ def sponsored_departments_by_company(company_name):
         print(row[0])
 
 
-doctors_specialization()
-doctors_salary()
-wards_in_department('Department A')
+# doctors_specialization()
+# doctors_salary()
+# wards_in_department('Department A')
 donations_by_month(1)
