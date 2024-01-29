@@ -109,6 +109,7 @@ def delete_rows(table):
         print("Delete canceled!")
 
 
+
 #                                             MENU LOOP
 menu = '''
 MENU:
