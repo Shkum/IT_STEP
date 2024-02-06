@@ -1,12 +1,37 @@
 import redis
 import json
 import datetime
+import bcrypt
 
 
 class MuseumApp:
     def __init__(self, redis_host='localhost', redis_port=6379, redis_db=2):
         self.redis = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, decode_responses=True)
         self.exhibit_id = 0
+
+    def add_user(self, username, password):
+        if self.redis.hexists('users', username):
+            print('User already exists')
+            return False
+        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        user_data = {
+            'password_hash': password_hash.decode('utf-8'),
+        }
+        self.redis.hset('users', username, json.dumps(user_data))
+        return True
+
+    def login(self, username, password):
+        stored_user_data = self.redis.hget('users', username)
+        if stored_user_data:
+            user_data = json.loads(stored_user_data)
+            stored_password_hash = user_data.get('password_hash')
+            if stored_password_hash and bcrypt.checkpw(password.encode('utf-8'), stored_password_hash.encode('utf-8')):
+                print(f'Logged in as "{username}"')
+                self.current_user = username
+                return True
+            print("Wrong user name or password")
+            return False
+
 
     def add_exhibit(self, exhibit_data):
         # Логіка додавання експонату
