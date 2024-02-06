@@ -1,94 +1,65 @@
-import redis
-import json
-import datetime
+from museum_app import MuseumApp
+if __name__ == "__main__":
+    app = MuseumApp()
 
+    while True:
+        print("\nМеню:")
+        print("1. Додати експонат")
+        print("2. Видалити експонат")
+        print("3. Редагувати інформацію про експонат")
+        print("4. Перегляд повної інформації про експонат")
+        print("5. Виведення інформації про всі експонати")
+        print("6. Перегляд інформації про людей, які мають відношення до певного експонату")
+        print("7. Перегляд інформації про експонати, що мають відношення до певної людини")
+        print("8. Перегляд набору експонатів на основі певного критерію")
+        print("0. Вихід")
 
-class MuseumApp:
-    def __init__(self, redis_host='localhost', redis_port=6379, redis_db=2):
-        self.redis = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, decode_responses=True)
+        choice = input("Оберіть опцію: ")
 
-
-    def add_exhibit(self, exhibit_data):
-        # Логіка додавання експонату
-
-        # Не ясно можно ли менять аргументы методов. Для добавления надо так же передать
-        # exhibit_name, но он так же может быть уже в exhibit_data. В других методах используется exhibit_id
-        # я везде заменил на exhibit_name так как при создании экспоната у нас передаётся exhibit_name, но
-        # не передается exhibit_id. Что бы не было путаницы будем везде использовать
-        # exhibit_name вместо exhibit_id
-        # решение ниже подразумевает что exhibit_name передается в exhibit_data
-        # иначе надо добавить exhibit_name в аргументы метода и закомментировать строку ниже
-
-        exhibit_name = exhibit_data['name']
-
-        if self.redis.hexists('exhibits', exhibit_name):
-            print('Exhibit already exists')
-            return False
-        self.redis.hset('exhibits', exhibit_name, json.dumps(exhibit_data))
-        return True
-
-    def delete_exhibit(self, exhibit_name):
-        # Логіка видалення експонату
-        if self.redis.hexists('exhibits', exhibit_name):
-            self.redis.hdel('exhibits', exhibit_name)
-            print('Exhibit deleted')
+        if choice == "1":
+            exhibit_data = {
+                'name': input("Введіть назву експонату: "),
+                'description': input("Введіть опис експонату: "),
+                'category': input("Введіть категорію експонату: "),
+                'related_people': input("Введіть імена людей через кому, які мають відношення до експонату (натисніть Enter, якщо немає): ").split(',')
+            }
+            app.add_exhibit(exhibit_data)
+        elif choice == "2":
+            exhibit_id = input("Введіть ID експонату для видалення: ")
+            app.delete_exhibit(exhibit_id)
+        elif choice == "3":
+            exhibit_id = input("Введіть ID експонату для редагування: ")
+            new_data = {
+                'name': input("Введіть нову назву експонату (натисніть Enter, якщо не хочете змінювати): "),
+                'description': input("Введіть новий опис експонату (натисніть Enter, якщо не хочете змінювати): "),
+                'category': input("Введіть нову категорію експонату (натисніть Enter, якщо не хочете змінювати): "),
+                'related_people': input("Введіть нові імена людей через кому, які мають відношення до експонату (натисніть Enter, якщо не хочете змінювати): ").split(',')
+            }
+            app.edit_exhibit(exhibit_id, new_data)
+        elif choice == "4":
+            exhibit_id = input("Введіть ID експонату для перегляду повної інформації: ")
+            result = app.view_exhibit_info(exhibit_id)
+            print(f"Інформація про експонат {exhibit_id}: {result}")
+        elif choice == "5":
+            results = app.view_all_exhibits()
+            print(f"Інформація про всі експонати: ")
+            for result in results:
+                print(result)
+        elif choice == "6":
+            exhibit_id = input("Введіть ID експонату для перегляду інформації про людей, які мають відношення: ")
+            result = app.view_related_people(exhibit_id)
+            print(f"Інформація про людей, які мають відношення до експонату {exhibit_id}: {result}")
+        elif choice == "7":
+            person_name = input("Введіть ім'я людини для перегляду інформації про пов'язані експонати: ")
+            result = app.view_related_exhibits(person_name)
+            print(f"Інформація про експонати, які мають відношення до людини {person_name}: {result}")
+        elif choice == "8":
+            category = input("Введіть категорію для перегляду експонатів: ")
+            results = app.view_exhibits_by_category(category)
+            print(f"Експонати у категорії {category}:")
+            for result in results:
+                print(result)
+        elif choice == "0":
+            break
         else:
-            print('Exhibit not found')
-
-    def edit_exhibit(self, exhibit_name, new_data):
-        # Логіка редагування експонату
-        if not self.redis.hexists('exhibits', exhibit_name):
-            print('Exhibit not found')
-            return
-        stored_data = self.redis.hget('exhibits', exhibit_name)
-        if stored_data:
-            try:
-                exhibit_data = json.loads(stored_data)
-            except json.JSONDecodeError:
-                print('Data decoding error')
-                return
-        else:
-            print('Exhibit`s data not available or damaged')
-            return
-        for key, value in new_data.items():
-            if value:
-                exhibit_data[key] = value
-
-        self.redis.hset('exhibits', exhibit_name, json.dumps(exhibit_data))
-        print('Exhibit data updated')
-
-    def view_exhibit_info(self, exhibit_name):
-        # Логіка перегляду інформації про експонат
-        if self.redis.hexists('exhibits', exhibit_name):
-            return json.loads(self.redis.hget('exhibits', exhibit_name))
-        else:
-            # ни чего не возвращаем, что бы не было ошибки при
-            # проверке возвращаемых данных (if view_exhibit_info(exhibit_name):)
-            # будет возвращен None, значит экспонат не найден
-            print(f'Exhibit with id <{exhibit_name}> not found')
-
-    def view_all_exhibits(self):
-        # Логіка перегляду всіх експонатів
-        exhibits = self.redis.hgetall('exhibits')
-        result = '\n'
-        for exhibit_index, exhibit in enumerate(exhibits):
-            result += f'{exhibit_index} - {exhibit}: {self.redis.hget('exhibits', exhibit)}\n'
-        return result
-
-    def view_related_people(self, exhibit_name):
-        # Логіка перегляду людей, пов'язаних з експонатом
-        ...
-
-    def view_related_exhibits(self, person_name):
-        # Логіка перегляду експонатів, пов'язаних з людиною
-        ...
-
-    def view_exhibits_by_category(self, category):
-        # Логіка перегляду експонатів за категорією
-        exhibits = self.redis.hgetall('exhibits')
-        result = []
-        for exhibit in exhibits:
-            exhibit_category = json.loads(exhibits[exhibit])['category']
-            if category == exhibit_category:
-                result.append(exhibits[exhibit])
-        return result
+            print("Невірний вибір. Спробуйте ще раз.")
