@@ -1,8 +1,28 @@
+
+# можно было бы все прикрутить к редис и bcrypt, но в задании этого не было :)
+# тут просто реализация методов
+
+class User:
+    def __init__(self, user_name='', password=''):
+        self.user_name = user_name
+        self.password = password
+
+
 class WebSite:
     def __init__(self, name, url):
         self._name = name
         self._url = url
         self._page_list = {}
+        self._user: User() = None
+
+    def set_user(self, user):
+        self._user = user
+
+    def login(self, user, password):
+        if self._user.user_name == user and self._user.password == password:
+            print('\nYou are successfully logged in.')
+        else:
+            print('\nWrong user name or password.')
 
     def add_page(self, caption, page):
         self._page_list[caption] = page
@@ -18,6 +38,16 @@ class WebSite:
     def get_webpage_info(self):
         return f'\nWEB SITE INFO: \nTotal pages {len(self._page_list)}\nList of available pages: {self._page_list}'
 
+    def search_page_by_caption(self, caption):
+        for page in self._page_list:
+            if caption in page:
+                print(f'\nPage "{caption}" found: {self._page_list[page].view_page_detail()}')
+
+    def search_page_by_content(self, content):
+        for page in self._page_list:
+            if content in self._page_list[page]._content:
+                print(f'\nPage "{content}" found: {self._page_list[page].view_page_detail()}')
+
 
 class WebPage:
     def __init__(self, caption, content, publication_date):
@@ -30,6 +60,15 @@ class WebPage:
 
     def view_page_detail(self):
         return f'\nWEB PAGE INFO: \nPage: {self._caption}\nContent: {self._content}\nPublication date: {self._publication_date}'
+
+    def edit_page(self):
+        new_caption = input('\nEnter new caption: ')
+        new_content = input('Enter new content: ')
+        new_publication_date = input('Enter new publication date: ')
+        self._caption = new_caption
+        self._content = new_content
+        self._publication_date = new_publication_date
+
 
 
 website = WebSite('MySite', 'www.mysite.com')
@@ -49,6 +88,22 @@ website.delete_page(page2._caption)
 print(website.get_webpage_info())
 
 print(page1.view_page_detail())
+
+website.search_page_by_caption('1')
+
+website.search_page_by_content('about 1')
+
+page1.edit_page()
+
+user = User('test', 'test')
+
+website.set_user(user)
+
+user_name = input('\nEnter user name: ')
+
+password = input('Enter user password: ')
+
+website.login(user_name, password)
 
 menu = '''
     MENU:
